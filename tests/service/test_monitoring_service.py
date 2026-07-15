@@ -28,3 +28,21 @@ def test_상태별_주문_수를_집계한다():
     assert counts[OrderStatus.CONFIRMED] == 1
     assert counts[OrderStatus.PRODUCING] == 0
     assert counts[OrderStatus.RELEASE] == 0
+
+
+def test_REJECTED_주문은_집계에서_제외된다():
+    order_repository = OrderRepository()
+    sample_repository = SampleRepository()
+    sample_repository.add(
+        Sample(sample_id="SMP-001", name="Wafer-A", avg_production_time=2.5, yield_rate=0.9)
+    )
+    order_service = OrderService(order_repository, sample_repository, ProductionService())
+    monitoring_service = MonitoringService(order_repository)
+
+    order_id = order_service.reserve(sample_id="SMP-001", customer_name="홍길동", quantity=1)
+    order_service.reject(order_id)
+
+    counts = monitoring_service.count_by_status()
+
+    assert sum(counts.values()) == 0
+    assert OrderStatus.REJECTED not in counts
