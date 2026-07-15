@@ -9,6 +9,10 @@ def calculate_actual_production(shortage, yield_rate):
     return math.ceil(shortage / yield_rate)
 
 
+def calculate_total_production_time(avg_production_time, actual_production):
+    return avg_production_time * actual_production
+
+
 class ProductionService:
     def __init__(self):
         self._queue = []
