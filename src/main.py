@@ -56,6 +56,10 @@ def handle_order_menu(controller, view):
             print(f"예약 완료: {order_id}")
         elif choice == "2":
             print(view.render_order_list(controller.list_reserved_orders()))
+        elif choice == "3":
+            order_id = input("주문 ID: ").strip()
+            controller.approve_order(order_id)
+            print("승인 완료")
         elif choice == "0":
             break
 
