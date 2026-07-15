@@ -21,6 +21,17 @@ class ConsoleView:
         ]
         return "\n".join(lines)
 
+    def render_order_menu(self):
+        lines = [
+            "--- 주문 ---",
+            "1. 예약",
+            "2. 접수된 목록 조회",
+            "3. 승인",
+            "4. 거절",
+            "0. 뒤로가기",
+        ]
+        return "\n".join(lines)
+
     def render_sample_list(self, samples):
         if not samples:
             return "등록된 시료가 없습니다."

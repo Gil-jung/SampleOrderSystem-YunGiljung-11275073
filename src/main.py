@@ -43,6 +43,21 @@ def handle_sample_menu(controller, view):
             break
 
 
+def handle_order_menu(controller, view):
+    while True:
+        print(view.render_order_menu())
+        choice = input("선택: ").strip()
+
+        if choice == "1":
+            sample_id = input("시료 ID: ").strip()
+            customer_name = input("고객명: ").strip()
+            quantity = int(input("수량: ").strip())
+            order_id = controller.reserve_order(sample_id, customer_name, quantity)
+            print(f"예약 완료: {order_id}")
+        elif choice == "0":
+            break
+
+
 def main():
     controller = build_controller()
     view = ConsoleView()
@@ -58,6 +73,8 @@ def main():
 
         if choice == "1":
             handle_sample_menu(controller, view)
+        elif choice == "2":
+            handle_order_menu(controller, view)
         elif choice == "0":
             print("종료합니다.")
             break
