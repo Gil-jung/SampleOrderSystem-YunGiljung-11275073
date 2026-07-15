@@ -1,7 +1,8 @@
 class MenuController:
-    def __init__(self, sample_service, order_service):
+    def __init__(self, sample_service, order_service, monitoring_service):
         self._sample_service = sample_service
         self._order_service = order_service
+        self._monitoring_service = monitoring_service
 
     def register_sample(self, sample_id, name, avg_production_time, yield_rate):
         self._sample_service.register(sample_id, name, avg_production_time, yield_rate)
@@ -26,6 +27,20 @@ class MenuController:
 
     def reject_order(self, order_id):
         self._order_service.reject(order_id)
+
+    def get_order_counts(self):
+        counts = self._monitoring_service.count_by_status()
+        return {status.name: count for status, count in counts.items()}
+
+    def get_stock_statuses(self):
+        return [
+            {
+                "sample_id": sample.sample_id,
+                "stock": sample.stock,
+                "status": self._monitoring_service.stock_status(sample.sample_id),
+            }
+            for sample in self._sample_service.list_all()
+        ]
 
     @staticmethod
     def _sample_to_dict(sample):
