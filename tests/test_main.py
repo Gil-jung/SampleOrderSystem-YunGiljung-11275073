@@ -116,3 +116,38 @@ def test_주문_메뉴에서_예약하면_주문ID가_출력된다():
     assert result.returncode == 0
     assert result.stderr == ""
     assert "ORD-" in result.stdout
+
+
+def test_주문_메뉴에서_접수된_목록을_조회하면_고객명이_출력된다():
+    user_input = "\n".join(
+        [
+            "1",  # 시료 관리
+            "1",  # 등록
+            "SMP-001",
+            "Wafer-A",
+            "2.5",
+            "0.9",
+            "0",
+            "2",  # 주문
+            "1",  # 예약
+            "SMP-001",
+            "홍길동",
+            "5",
+            "2",  # 접수된 목록 조회
+            "0",
+            "0",
+            "",
+        ]
+    )
+
+    result = subprocess.run(
+        [sys.executable, "main.py"],
+        input=user_input,
+        capture_output=True,
+        text=True,
+        cwd=SRC_DIR,
+    )
+
+    assert result.returncode == 0
+    assert result.stderr == ""
+    assert "홍길동" in result.stdout
