@@ -1,6 +1,6 @@
 import pytest
 
-from model.order import Order, OrderStatus
+from model.order import Order, OrderError, OrderStatus
 from model.sample import Sample
 from repository.order_repository import OrderRepository
 from repository.sample_repository import SampleRepository
@@ -110,3 +110,19 @@ def test_존재하지_않는_주문을_승인하면_예외가_발생한다():
 
     with pytest.raises(ValueError):
         service.approve("UNKNOWN-ORDER-ID")
+
+
+def test_이미_승인된_주문을_다시_승인하면_OrderError로_거부된다():
+    order_repository = OrderRepository()
+    sample_repository = SampleRepository()
+    sample_repository.add(
+        Sample(sample_id="SMP-001", name="Wafer-A", avg_production_time=2.5, yield_rate=0.9)
+    )
+    sample_repository.get("SMP-001").stock = 10
+    production_service = ProductionService()
+    service = OrderService(order_repository, sample_repository, production_service)
+    order_id = service.reserve(sample_id="SMP-001", customer_name="홍길동", quantity=5)
+    service.approve(order_id)
+
+    with pytest.raises(OrderError):
+        service.approve(order_id)
