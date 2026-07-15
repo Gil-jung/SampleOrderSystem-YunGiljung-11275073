@@ -72,6 +72,14 @@ class ConsoleView:
         ]
         return "\n".join(lines)
 
+    def render_current_production(self, status):
+        if status is None:
+            return "현재 생산 중인 항목이 없습니다."
+        return (
+            f"[{status['order_id']}] 실 생산량: {status['actual_production']}, "
+            f"총 생산 시간: {status['total_production_time']}"
+        )
+
     def render_stock_statuses(self, statuses):
         if not statuses:
             return "등록된 시료가 없습니다."
