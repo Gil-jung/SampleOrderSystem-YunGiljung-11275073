@@ -94,3 +94,15 @@ def test_재고가_0이면_고갈로_판정한다():
     order_service.approve(order_id)  # 재고 충분 -> CONFIRMED, stock 5 -> 0, 수요 5
 
     assert monitoring_service.stock_status("SMP-001") == "고갈"
+
+
+def test_미출고_수요가_없으면_재고가_0이어도_여유로_판정한다():
+    order_repository = OrderRepository()
+    sample_repository = SampleRepository()
+    sample_repository.add(
+        Sample(sample_id="SMP-001", name="Wafer-A", avg_production_time=2.5, yield_rate=0.9)
+    )
+    # 등록 직후 재고 0, CONFIRMED 주문 없음(수요 0)
+    monitoring_service = MonitoringService(order_repository, sample_repository)
+
+    assert monitoring_service.stock_status("SMP-001") == "여유"
