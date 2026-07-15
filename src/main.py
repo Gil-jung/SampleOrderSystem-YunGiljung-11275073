@@ -75,6 +75,8 @@ def handle_monitoring_menu(controller, view):
 
         if choice == "1":
             print(view.render_order_counts(controller.get_order_counts()))
+        elif choice == "2":
+            print(view.render_stock_statuses(controller.get_stock_statuses()))
         elif choice == "0":
             break
 

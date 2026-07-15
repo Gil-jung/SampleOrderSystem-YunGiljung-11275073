@@ -53,6 +53,15 @@ class ConsoleView:
     def render_order_counts(self, counts):
         return "\n".join(f"{status}: {count}" for status, count in counts.items())
 
+    def render_stock_statuses(self, statuses):
+        if not statuses:
+            return "등록된 시료가 없습니다."
+        lines = [
+            f"[{status['sample_id']}] 재고: {status['stock']} ({status['status']})"
+            for status in statuses
+        ]
+        return "\n".join(lines)
+
     def render_order_list(self, orders):
         if not orders:
             return "주문이 없습니다."
