@@ -37,3 +37,7 @@ class OrderService:
         else:
             order.transition_to(OrderStatus.PRODUCING)
             self._production_service.enqueue(order_id)
+
+    def reject(self, order_id):
+        order = self._order_repository.get(order_id)
+        order.transition_to(OrderStatus.REJECTED)
