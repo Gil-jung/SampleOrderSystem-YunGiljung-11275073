@@ -64,3 +64,20 @@ def test_접수된_주문_목록_조회_시_RESERVED_상태만_반환된다():
     assert len(reserved_orders) == 1
     assert reserved_orders[0].customer_name == "홍길동"
     assert reserved_orders[0].status == OrderStatus.RESERVED
+
+
+def test_재고가_충분하면_승인_시_즉시_CONFIRMED로_전환되고_재고가_차감된다():
+    order_repository = OrderRepository()
+    sample_repository = SampleRepository()
+    sample_repository.add(
+        Sample(sample_id="SMP-001", name="Wafer-A", avg_production_time=2.5, yield_rate=0.9)
+    )
+    sample_repository.get("SMP-001").stock = 10
+    service = OrderService(order_repository, sample_repository)
+    order_id = service.reserve(sample_id="SMP-001", customer_name="홍길동", quantity=5)
+
+    service.approve(order_id)
+
+    approved_order = order_repository.get(order_id)
+    assert approved_order.status == OrderStatus.CONFIRMED
+    assert sample_repository.get("SMP-001").stock == 5
