@@ -42,3 +42,11 @@ def test_CONFIRMED가_아닌_주문을_출고하면_OrderError로_거부된다()
 
     with pytest.raises(OrderError):
         release_service.release(order_id)
+
+
+def test_존재하지_않는_주문을_출고하면_예외가_발생한다():
+    order_repository = OrderRepository()
+    release_service = ReleaseService(order_repository)
+
+    with pytest.raises(ValueError):
+        release_service.release("UNKNOWN-ORDER-ID")
