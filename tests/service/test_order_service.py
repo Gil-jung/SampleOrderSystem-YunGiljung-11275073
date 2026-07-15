@@ -1,6 +1,6 @@
 import pytest
 
-from model.order import OrderStatus
+from model.order import Order, OrderStatus
 from model.sample import Sample
 from repository.order_repository import OrderRepository
 from repository.sample_repository import SampleRepository
@@ -43,3 +43,24 @@ def test_등록된_시료여도_수량이_0_이하이면_예약이_거부된다(
 
     with pytest.raises(ValueError):
         service.reserve(sample_id="SMP-001", customer_name="홍길동", quantity=0)
+
+
+def test_접수된_주문_목록_조회_시_RESERVED_상태만_반환된다():
+    order_repository = OrderRepository()
+    sample_repository = SampleRepository()
+    sample_repository.add(
+        Sample(sample_id="SMP-001", name="Wafer-A", avg_production_time=2.5, yield_rate=0.9)
+    )
+    service = OrderService(order_repository, sample_repository)
+
+    service.reserve(sample_id="SMP-001", customer_name="홍길동", quantity=5)
+
+    rejected_order = Order(sample_id="SMP-001", customer_name="김철수", quantity=3)
+    rejected_order.transition_to(OrderStatus.REJECTED)
+    order_repository.add(rejected_order)
+
+    reserved_orders = service.list_reserved()
+
+    assert len(reserved_orders) == 1
+    assert reserved_orders[0].customer_name == "홍길동"
+    assert reserved_orders[0].status == OrderStatus.RESERVED
