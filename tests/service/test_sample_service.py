@@ -40,3 +40,26 @@ def test_이미_존재하는_시료_ID로_등록하면_거부된다():
             avg_production_time=1.0,
             yield_rate=0.8,
         )
+
+
+def test_전체_시료_조회_시_등록된_모든_시료와_재고가_반환된다():
+    repository = SampleRepository()
+    service = SampleService(repository)
+    service.register(
+        sample_id="SMP-001",
+        name="Wafer-A",
+        avg_production_time=2.5,
+        yield_rate=0.9,
+    )
+    service.register(
+        sample_id="SMP-002",
+        name="Wafer-B",
+        avg_production_time=1.0,
+        yield_rate=0.8,
+    )
+
+    samples = service.list_all()
+
+    ids = {sample.sample_id for sample in samples}
+    assert ids == {"SMP-001", "SMP-002"}
+    assert all(sample.stock == 0 for sample in samples)
