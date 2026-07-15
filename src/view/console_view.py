@@ -8,6 +8,7 @@ class ConsoleView:
             "3. 모니터링",
             "4. 출고 처리",
             "5. 생산 라인",
+            "0. 종료",
         ]
         return "\n".join(lines)
 
