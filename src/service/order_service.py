@@ -47,9 +47,19 @@ class OrderService:
             )
             order.transition_to(OrderStatus.PRODUCING)
             self._production_service.enqueue(
-                order_id, actual_production, total_production_time
+                order_id, actual_production, total_production_time, shortage
             )
 
     def reject(self, order_id):
         order = self._order_repository.get(order_id)
         order.transition_to(OrderStatus.REJECTED)
+
+    def complete_production(self):
+        status = self._production_service.current_status()
+        order = self._order_repository.get(status["order_id"])
+        sample = self._sample_repository.get(order.sample_id)
+
+        sample.stock += status["shortage"]
+        sample.stock -= order.quantity
+        order.transition_to(OrderStatus.CONFIRMED)
+        self._production_service.dequeue()
