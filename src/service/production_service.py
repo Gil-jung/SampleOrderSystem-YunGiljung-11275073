@@ -1,3 +1,7 @@
+def calculate_shortage(order_quantity, available_stock):
+    return order_quantity - available_stock
+
+
 class ProductionService:
     def __init__(self):
         self._queue = []
