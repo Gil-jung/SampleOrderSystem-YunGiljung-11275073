@@ -8,3 +8,7 @@ class Sample:
     avg_production_time: float
     yield_rate: float
     stock: int = 0
+
+    def __post_init__(self):
+        if not (0 <= self.yield_rate <= 1):
+            raise ValueError("yield_rate must be between 0 and 1")
