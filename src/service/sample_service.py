@@ -16,3 +16,6 @@ class SampleService:
 
     def list_all(self):
         return self._repository.list()
+
+    def search(self, name):
+        return [sample for sample in self.list_all() if name in sample.name]
