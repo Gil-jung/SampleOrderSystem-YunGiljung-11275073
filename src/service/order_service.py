@@ -2,9 +2,10 @@ from model.order import Order, OrderStatus
 
 
 class OrderService:
-    def __init__(self, order_repository, sample_repository):
+    def __init__(self, order_repository, sample_repository, production_service):
         self._order_repository = order_repository
         self._sample_repository = sample_repository
+        self._production_service = production_service
 
     def reserve(self, sample_id, customer_name, quantity):
         try:
@@ -29,3 +30,6 @@ class OrderService:
         if sample.stock >= order.quantity:
             sample.stock -= order.quantity
             order.transition_to(OrderStatus.CONFIRMED)
+        else:
+            order.transition_to(OrderStatus.PRODUCING)
+            self._production_service.enqueue(order_id)
