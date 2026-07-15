@@ -72,6 +72,11 @@ class ConsoleView:
         ]
         return "\n".join(lines)
 
+    def render_production_queue(self, queue):
+        if not queue:
+            return "대기 중인 주문이 없습니다."
+        return "\n".join(queue)
+
     def render_current_production(self, status):
         if status is None:
             return "현재 생산 중인 항목이 없습니다."

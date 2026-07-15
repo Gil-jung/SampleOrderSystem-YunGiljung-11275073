@@ -103,6 +103,8 @@ def handle_production_menu(controller, view):
 
         if choice == "1":
             print(view.render_current_production(controller.get_current_production_status()))
+        elif choice == "2":
+            print(view.render_production_queue(controller.get_production_queue()))
         elif choice == "3":
             controller.complete_current_production()
             print("생산 완료")
