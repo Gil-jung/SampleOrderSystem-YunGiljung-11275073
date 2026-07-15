@@ -40,3 +40,12 @@ class ConsoleView:
             for sample in samples
         ]
         return "\n".join(lines)
+
+    def render_order_list(self, orders):
+        if not orders:
+            return "주문이 없습니다."
+        lines = [
+            f"[{order['order_id']}] {order['customer_name']} - {order['sample_id']} x{order['quantity']} ({order['status']})"
+            for order in orders
+        ]
+        return "\n".join(lines)

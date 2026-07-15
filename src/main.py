@@ -54,6 +54,8 @@ def handle_order_menu(controller, view):
             quantity = int(input("수량: ").strip())
             order_id = controller.reserve_order(sample_id, customer_name, quantity)
             print(f"예약 완료: {order_id}")
+        elif choice == "2":
+            print(view.render_order_list(controller.list_reserved_orders()))
         elif choice == "0":
             break
 
