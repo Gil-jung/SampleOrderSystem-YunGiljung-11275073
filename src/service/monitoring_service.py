@@ -32,3 +32,5 @@ class MonitoringService:
             return "여유"
         elif stock > 0:
             return "부족"
+        else:
+            return "고갈"
