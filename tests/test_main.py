@@ -426,3 +426,43 @@ def test_출고_메뉴에서_출고_실행하면_RELEASE로_전환된다():
     assert result.stderr == ""
     assert "RELEASE: 1" in result.stdout
     assert "CONFIRMED: 0" in result.stdout
+
+
+def test_생산_라인_메뉴에서_생산_현황을_조회하면_실_생산량이_출력된다():
+    user_input = "\n".join(
+        [
+            "1",  # 시료 관리
+            "1",  # 등록
+            "SMP-001",
+            "Wafer-A",
+            "2.5",
+            "0.9",
+            "0",
+            "2",  # 주문
+            "1",  # 예약 (재고 0 -> 승인 시 PRODUCING)
+            "SMP-001",
+            "홍길동",
+            "9",
+            "3",  # 승인
+            "ORD-0001",
+            "0",
+            "5",  # 생산 라인
+            "1",  # 생산 현황 조회
+            "0",
+            "0",
+            "",
+        ]
+    )
+
+    result = subprocess.run(
+        [sys.executable, "main.py"],
+        input=user_input,
+        capture_output=True,
+        text=True,
+        cwd=SRC_DIR,
+    )
+
+    assert result.returncode == 0
+    assert result.stderr == ""
+    assert "ORD-0001" in result.stdout
+    assert "10" in result.stdout  # ceil(9/0.9) = 10 (실 생산량)
