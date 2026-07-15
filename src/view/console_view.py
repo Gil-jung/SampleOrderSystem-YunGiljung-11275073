@@ -53,6 +53,16 @@ class ConsoleView:
     def render_order_counts(self, counts):
         return "\n".join(f"{status}: {count}" for status, count in counts.items())
 
+    def render_production_menu(self):
+        lines = [
+            "--- 생산 라인 ---",
+            "1. 생산 현황 조회",
+            "2. 대기 큐 조회",
+            "3. 생산 완료 처리",
+            "0. 뒤로가기",
+        ]
+        return "\n".join(lines)
+
     def render_stock_statuses(self, statuses):
         if not statuses:
             return "등록된 시료가 없습니다."

@@ -81,6 +81,18 @@ def handle_monitoring_menu(controller, view):
             break
 
 
+def handle_production_menu(controller, view):
+    while True:
+        print(view.render_production_menu())
+        choice = input("선택: ").strip()
+
+        if choice == "3":
+            controller.complete_current_production()
+            print("생산 완료")
+        elif choice == "0":
+            break
+
+
 def main():
     controller = build_controller()
     view = ConsoleView()
@@ -100,6 +112,8 @@ def main():
             handle_order_menu(controller, view)
         elif choice == "3":
             handle_monitoring_menu(controller, view)
+        elif choice == "5":
+            handle_production_menu(controller, view)
         elif choice == "0":
             print("종료합니다.")
             break

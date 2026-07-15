@@ -60,6 +60,9 @@ class MenuController:
     def release_order(self, order_id):
         self._release_service.release(order_id)
 
+    def complete_current_production(self):
+        self._order_service.complete_production()
+
     @staticmethod
     def _sample_to_dict(sample):
         return {
