@@ -14,3 +14,6 @@ class OrderRepository:
 
     def list(self):
         return list(self._orders.values())
+
+    def list_with_ids(self):
+        return list(self._orders.items())
