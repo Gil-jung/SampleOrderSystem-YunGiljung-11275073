@@ -13,3 +13,6 @@ class SampleService:
             yield_rate=yield_rate,
         )
         self._repository.add(sample)
+
+    def list_all(self):
+        return self._repository.list()

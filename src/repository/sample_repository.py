@@ -9,3 +9,6 @@ class SampleRepository:
 
     def get(self, sample_id):
         return self._samples[sample_id]
+
+    def list(self):
+        return list(self._samples.values())
