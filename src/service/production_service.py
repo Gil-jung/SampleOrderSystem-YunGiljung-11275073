@@ -1,5 +1,12 @@
+import math
+
+
 def calculate_shortage(order_quantity, available_stock):
     return order_quantity - available_stock
+
+
+def calculate_actual_production(shortage, yield_rate):
+    return math.ceil(shortage / yield_rate)
 
 
 class ProductionService:
