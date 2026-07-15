@@ -160,3 +160,21 @@ def test_이미_승인된_주문을_거절하면_OrderError로_거부된다():
 
     with pytest.raises(OrderError):
         service.reject(order_id)
+
+
+def test_여러_주문이_승인되면_등록_순서대로_큐에_쌓인다():
+    order_repository = OrderRepository()
+    sample_repository = SampleRepository()
+    sample_repository.add(
+        Sample(sample_id="SMP-001", name="Wafer-A", avg_production_time=2.5, yield_rate=0.9)
+    )
+    sample_repository.get("SMP-001").stock = 0
+    production_service = ProductionService()
+    service = OrderService(order_repository, sample_repository, production_service)
+
+    first_id = service.reserve(sample_id="SMP-001", customer_name="홍길동", quantity=3)
+    second_id = service.reserve(sample_id="SMP-001", customer_name="김철수", quantity=2)
+    service.approve(first_id)
+    service.approve(second_id)
+
+    assert production_service.list_queue() == [first_id, second_id]
