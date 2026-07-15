@@ -88,6 +88,10 @@ def handle_release_menu(controller, view):
 
         if choice == "1":
             print(view.render_order_list(controller.list_confirmed_orders()))
+        elif choice == "2":
+            order_id = input("주문 ID: ").strip()
+            controller.release_order(order_id)
+            print("출고 완료")
         elif choice == "0":
             break
 
