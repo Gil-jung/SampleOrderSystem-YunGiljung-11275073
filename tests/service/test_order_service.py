@@ -178,3 +178,22 @@ def test_여러_주문이_승인되면_등록_순서대로_큐에_쌓인다():
     service.approve(second_id)
 
     assert production_service.list_queue() == [first_id, second_id]
+
+
+def test_생산_진행_상황_조회_시_큐_맨_앞_주문의_생산_정보가_반환된다():
+    order_repository = OrderRepository()
+    sample_repository = SampleRepository()
+    sample_repository.add(
+        Sample(sample_id="SMP-001", name="Wafer-A", avg_production_time=2.5, yield_rate=0.9)
+    )
+    sample_repository.get("SMP-001").stock = 0
+    production_service = ProductionService()
+    service = OrderService(order_repository, sample_repository, production_service)
+    order_id = service.reserve(sample_id="SMP-001", customer_name="홍길동", quantity=9)
+
+    service.approve(order_id)
+
+    status = production_service.current_status()
+    assert status["order_id"] == order_id
+    assert status["actual_production"] == 10  # ceil(9/0.9) = 10
+    assert status["total_production_time"] == 25.0  # 2.5 * 10
