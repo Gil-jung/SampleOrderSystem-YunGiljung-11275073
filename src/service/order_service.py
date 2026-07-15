@@ -1,4 +1,4 @@
-from model.order import Order
+from model.order import Order, OrderStatus
 
 
 class OrderService:
@@ -14,3 +14,10 @@ class OrderService:
 
         order = Order(sample_id=sample_id, customer_name=customer_name, quantity=quantity)
         return self._order_repository.add(order)
+
+    def list_reserved(self):
+        return [
+            order
+            for order in self._order_repository.list()
+            if order.status == OrderStatus.RESERVED
+        ]
