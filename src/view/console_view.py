@@ -41,6 +41,18 @@ class ConsoleView:
         ]
         return "\n".join(lines)
 
+    def render_monitoring_menu(self):
+        lines = [
+            "--- 모니터링 ---",
+            "1. 주문량 조회",
+            "2. 재고량 조회",
+            "0. 뒤로가기",
+        ]
+        return "\n".join(lines)
+
+    def render_order_counts(self, counts):
+        return "\n".join(f"{status}: {count}" for status, count in counts.items())
+
     def render_order_list(self, orders):
         if not orders:
             return "주문이 없습니다."

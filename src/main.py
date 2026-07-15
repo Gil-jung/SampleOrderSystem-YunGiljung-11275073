@@ -68,6 +68,17 @@ def handle_order_menu(controller, view):
             break
 
 
+def handle_monitoring_menu(controller, view):
+    while True:
+        print(view.render_monitoring_menu())
+        choice = input("선택: ").strip()
+
+        if choice == "1":
+            print(view.render_order_counts(controller.get_order_counts()))
+        elif choice == "0":
+            break
+
+
 def main():
     controller = build_controller()
     view = ConsoleView()
@@ -85,6 +96,8 @@ def main():
             handle_sample_menu(controller, view)
         elif choice == "2":
             handle_order_menu(controller, view)
+        elif choice == "3":
+            handle_monitoring_menu(controller, view)
         elif choice == "0":
             print("종료합니다.")
             break
