@@ -21,3 +21,11 @@ class OrderService:
             for order in self._order_repository.list()
             if order.status == OrderStatus.RESERVED
         ]
+
+    def approve(self, order_id):
+        order = self._order_repository.get(order_id)
+        sample = self._sample_repository.get(order.sample_id)
+
+        if sample.stock >= order.quantity:
+            sample.stock -= order.quantity
+            order.transition_to(OrderStatus.CONFIRMED)
