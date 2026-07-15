@@ -1,4 +1,9 @@
 from model.order import Order, OrderStatus
+from service.production_service import (
+    calculate_actual_production,
+    calculate_shortage,
+    calculate_total_production_time,
+)
 
 
 class OrderService:
@@ -35,8 +40,15 @@ class OrderService:
             sample.stock -= order.quantity
             order.transition_to(OrderStatus.CONFIRMED)
         else:
+            shortage = calculate_shortage(order.quantity, sample.stock)
+            actual_production = calculate_actual_production(shortage, sample.yield_rate)
+            total_production_time = calculate_total_production_time(
+                sample.avg_production_time, actual_production
+            )
             order.transition_to(OrderStatus.PRODUCING)
-            self._production_service.enqueue(order_id)
+            self._production_service.enqueue(
+                order_id, actual_production, total_production_time
+            )
 
     def reject(self, order_id):
         order = self._order_repository.get(order_id)
