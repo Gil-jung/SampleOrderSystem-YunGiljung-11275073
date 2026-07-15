@@ -24,7 +24,11 @@ class OrderService:
         ]
 
     def approve(self, order_id):
-        order = self._order_repository.get(order_id)
+        try:
+            order = self._order_repository.get(order_id)
+        except KeyError:
+            raise ValueError(f"unknown order_id: {order_id}")
+
         sample = self._sample_repository.get(order.sample_id)
 
         if sample.stock >= order.quantity:
