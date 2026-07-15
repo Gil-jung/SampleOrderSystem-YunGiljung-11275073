@@ -1,9 +1,17 @@
 class MenuController:
-    def __init__(self, sample_service, order_service, monitoring_service, production_service):
+    def __init__(
+        self,
+        sample_service,
+        order_service,
+        monitoring_service,
+        production_service,
+        release_service,
+    ):
         self._sample_service = sample_service
         self._order_service = order_service
         self._monitoring_service = monitoring_service
         self._production_service = production_service
+        self._release_service = release_service
 
     def register_sample(self, sample_id, name, avg_production_time, yield_rate):
         self._sample_service.register(sample_id, name, avg_production_time, yield_rate)
@@ -48,6 +56,9 @@ class MenuController:
 
     def get_current_production_status(self):
         return self._production_service.current_status()
+
+    def release_order(self, order_id):
+        self._release_service.release(order_id)
 
     @staticmethod
     def _sample_to_dict(sample):
