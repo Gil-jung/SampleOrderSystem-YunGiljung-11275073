@@ -60,6 +60,10 @@ def handle_order_menu(controller, view):
             order_id = input("주문 ID: ").strip()
             controller.approve_order(order_id)
             print("승인 완료")
+        elif choice == "4":
+            order_id = input("주문 ID: ").strip()
+            controller.reject_order(order_id)
+            print("거절 완료")
         elif choice == "0":
             break
 
