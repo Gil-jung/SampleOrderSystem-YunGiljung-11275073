@@ -1,0 +1,86 @@
+{
+  "type": "object",
+  "properties": {
+    "orderId": {
+      "type": "string",
+      "x-generator": { "pattern": "ORD-{seq:04d}" }
+    },
+    "orderDate": {
+      "type": "string",
+      "format": "date-time",
+      "x-generator": { "start": "2026-01-01T00:00:00", "end": "2026-12-31T23:59:59" }
+    },
+    "status": {
+      "type": "string",
+      "enum": ["PAID", "CANCELLED", "PENDING"]
+    },
+    "customer": {
+      "type": "object",
+      "properties": {
+        "customerId": {
+          "type": "string",
+          "x-generator": { "pattern": "CUST-{seq:04d}" }
+        },
+        "name": {
+          "type": "string",
+          "x-generator": { "choices": ["홍길동", "김철수", "이영희"] }
+        },
+        "phone": {
+          "type": "string",
+          "x-generator": { "pattern": "010-0000-0000" }
+        }
+      }
+    },
+    "items": {
+      "type": "array",
+      "x-generator": { "minItems": 1, "maxItems": 3 },
+      "items": {
+        "type": "object",
+        "properties": {
+          "productName": {
+            "type": "string",
+            "x-generator": { "choices": ["무선 마우스", "키보드", "모니터"] }
+          },
+          "quantity": {
+            "type": "integer",
+            "x-generator": { "min": 1, "max": 5 }
+          },
+          "unitPrice": {
+            "type": "integer",
+            "x-generator": { "min": 1000, "max": 100000 }
+          }
+        }
+      }
+    },
+    "payment": {
+      "type": "object",
+      "properties": {
+        "method": {
+          "type": "string",
+          "enum": ["CARD", "CASH", "TRANSFER"]
+        },
+        "amount": {
+          "type": "integer",
+          "x-generator": { "derivedFrom": "items", "formula": "sum(quantity*unitPrice)" }
+        },
+        "status": {
+          "type": "string",
+          "enum": ["COMPLETED", "PENDING", "FAILED"]
+        }
+      }
+    },
+    "shipment": {
+      "type": "object",
+      "properties": {
+        "trackingNo": {
+          "type": "string",
+          "x-generator": { "pattern": "TRK-{seq:06d}" }
+        },
+        "status": {
+          "type": "string",
+          "enum": ["PREPARING", "SHIPPED", "DELIVERED"]
+        }
+      }
+    }
+  }
+}
