@@ -78,3 +78,19 @@ def test_재고가_0보다_크고_미출고_수요보다_적으면_부족으로_
     order_service.approve(order_id)  # 재고 충분 -> CONFIRMED, stock 10 -> 2, 수요 8
 
     assert monitoring_service.stock_status("SMP-001") == "부족"
+
+
+def test_재고가_0이면_고갈로_판정한다():
+    order_repository = OrderRepository()
+    sample_repository = SampleRepository()
+    sample_repository.add(
+        Sample(sample_id="SMP-001", name="Wafer-A", avg_production_time=2.5, yield_rate=0.9)
+    )
+    sample_repository.get("SMP-001").stock = 5
+    order_service = OrderService(order_repository, sample_repository, ProductionService())
+    monitoring_service = MonitoringService(order_repository, sample_repository)
+
+    order_id = order_service.reserve(sample_id="SMP-001", customer_name="홍길동", quantity=5)
+    order_service.approve(order_id)  # 재고 충분 -> CONFIRMED, stock 5 -> 0, 수요 5
+
+    assert monitoring_service.stock_status("SMP-001") == "고갈"
