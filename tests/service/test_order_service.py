@@ -31,3 +31,15 @@ def test_존재하지_않는_시료로_예약하면_거부된다():
 
     with pytest.raises(ValueError):
         service.reserve(sample_id="UNKNOWN", customer_name="홍길동", quantity=5)
+
+
+def test_등록된_시료여도_수량이_0_이하이면_예약이_거부된다():
+    order_repository = OrderRepository()
+    sample_repository = SampleRepository()
+    sample_repository.add(
+        Sample(sample_id="SMP-001", name="Wafer-A", avg_production_time=2.5, yield_rate=0.9)
+    )
+    service = OrderService(order_repository, sample_repository)
+
+    with pytest.raises(ValueError):
+        service.reserve(sample_id="SMP-001", customer_name="홍길동", quantity=0)
