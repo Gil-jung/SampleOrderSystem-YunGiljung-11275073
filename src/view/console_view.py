@@ -53,6 +53,15 @@ class ConsoleView:
     def render_order_counts(self, counts):
         return "\n".join(f"{status}: {count}" for status, count in counts.items())
 
+    def render_release_menu(self):
+        lines = [
+            "--- 출고 처리 ---",
+            "1. 목록 조회",
+            "2. 출고 실행",
+            "0. 뒤로가기",
+        ]
+        return "\n".join(lines)
+
     def render_production_menu(self):
         lines = [
             "--- 생산 라인 ---",

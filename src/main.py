@@ -81,6 +81,17 @@ def handle_monitoring_menu(controller, view):
             break
 
 
+def handle_release_menu(controller, view):
+    while True:
+        print(view.render_release_menu())
+        choice = input("선택: ").strip()
+
+        if choice == "1":
+            print(view.render_order_list(controller.list_confirmed_orders()))
+        elif choice == "0":
+            break
+
+
 def handle_production_menu(controller, view):
     while True:
         print(view.render_production_menu())
@@ -112,6 +123,8 @@ def main():
             handle_order_menu(controller, view)
         elif choice == "3":
             handle_monitoring_menu(controller, view)
+        elif choice == "4":
+            handle_release_menu(controller, view)
         elif choice == "5":
             handle_production_menu(controller, view)
         elif choice == "0":

@@ -35,6 +35,13 @@ class OrderService:
             if order.status == OrderStatus.RESERVED
         ]
 
+    def list_confirmed_with_ids(self):
+        return [
+            (order_id, order)
+            for order_id, order in self._order_repository.list_with_ids()
+            if order.status == OrderStatus.CONFIRMED
+        ]
+
     def approve(self, order_id):
         try:
             order = self._order_repository.get(order_id)

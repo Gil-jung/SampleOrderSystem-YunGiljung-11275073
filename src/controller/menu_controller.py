@@ -57,6 +57,12 @@ class MenuController:
     def get_current_production_status(self):
         return self._production_service.current_status()
 
+    def list_confirmed_orders(self):
+        return [
+            self._order_to_dict(order_id, order)
+            for order_id, order in self._order_service.list_confirmed_with_ids()
+        ]
+
     def release_order(self, order_id):
         self._release_service.release(order_id)
 
