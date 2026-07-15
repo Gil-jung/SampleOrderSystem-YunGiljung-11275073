@@ -22,6 +22,27 @@ def build_controller():
     )
 
 
+def handle_sample_menu(controller, view):
+    while True:
+        print(view.render_sample_menu())
+        choice = input("선택: ").strip()
+
+        if choice == "1":
+            sample_id = input("시료 ID: ").strip()
+            name = input("이름: ").strip()
+            avg_production_time = float(input("평균 생산시간: ").strip())
+            yield_rate = float(input("수율: ").strip())
+            controller.register_sample(sample_id, name, avg_production_time, yield_rate)
+            print("등록 완료")
+        elif choice == "2":
+            print(view.render_sample_list(controller.list_samples()))
+        elif choice == "3":
+            keyword = input("검색어: ").strip()
+            print(view.render_sample_list(controller.search_samples(keyword)))
+        elif choice == "0":
+            break
+
+
 def main():
     controller = build_controller()
     view = ConsoleView()
@@ -35,7 +56,9 @@ def main():
         print(view.render_main_menu(summary))
         choice = input("선택: ").strip()
 
-        if choice == "0":
+        if choice == "1":
+            handle_sample_menu(controller, view)
+        elif choice == "0":
             print("종료합니다.")
             break
 

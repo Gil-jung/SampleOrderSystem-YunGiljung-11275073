@@ -10,3 +10,22 @@ class ConsoleView:
             "5. 생산 라인",
         ]
         return "\n".join(lines)
+
+    def render_sample_menu(self):
+        lines = [
+            "--- 시료 관리 ---",
+            "1. 등록",
+            "2. 조회",
+            "3. 검색",
+            "0. 뒤로가기",
+        ]
+        return "\n".join(lines)
+
+    def render_sample_list(self, samples):
+        if not samples:
+            return "등록된 시료가 없습니다."
+        lines = [
+            f"[{sample['sample_id']}] {sample['name']} (재고: {sample['stock']})"
+            for sample in samples
+        ]
+        return "\n".join(lines)
