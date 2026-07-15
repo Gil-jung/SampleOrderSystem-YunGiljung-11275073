@@ -225,3 +225,40 @@ def test_주문_메뉴에서_거절하면_접수된_목록에서_사라진다():
     assert result.returncode == 0
     assert result.stderr == ""
     assert "주문이 없습니다." in result.stdout
+
+
+def test_모니터링_메뉴에서_주문량_조회_시_상태별_건수가_출력된다():
+    user_input = "\n".join(
+        [
+            "1",  # 시료 관리
+            "1",  # 등록
+            "SMP-001",
+            "Wafer-A",
+            "2.5",
+            "0.9",
+            "0",
+            "2",  # 주문
+            "1",  # 예약
+            "SMP-001",
+            "홍길동",
+            "5",
+            "0",
+            "3",  # 모니터링
+            "1",  # 주문량 조회
+            "0",
+            "0",
+            "",
+        ]
+    )
+
+    result = subprocess.run(
+        [sys.executable, "main.py"],
+        input=user_input,
+        capture_output=True,
+        text=True,
+        cwd=SRC_DIR,
+    )
+
+    assert result.returncode == 0
+    assert result.stderr == ""
+    assert "RESERVED: 1" in result.stdout
